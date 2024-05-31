@@ -21,6 +21,20 @@ namespace Notepads.Views.MainPage
 
     public sealed partial class NotepadsMainPage
     {
+        private async Task OpenNewFilesDirectlyAsync(IReadOnlyList<StorageFile> files)
+        {
+            if (files == null || files.Count == 0)
+            {
+                NotepadsCore.FocusOnSelectedTextEditor();
+                return;
+            }
+
+            foreach (var file in files)
+            {
+                await OpenFileAsync(file);
+            }
+        }
+
         private async Task OpenNewFilesAsync()
         {
             IReadOnlyList<StorageFile> files;

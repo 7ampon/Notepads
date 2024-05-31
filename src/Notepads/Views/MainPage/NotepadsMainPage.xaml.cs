@@ -9,6 +9,7 @@ namespace Notepads.Views.MainPage
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Windows.Input;
     using Notepads.Commands;
     using Notepads.Controls.Dialog;
     using Notepads.Controls.Print;
@@ -627,5 +628,21 @@ namespace Notepads.Views.MainPage
         }
 
         #endregion
+
+        private async void Page_Drop(object sender, DragEventArgs e)
+        {
+            if (e.DataView.Contains(StandardDataFormats.StorageItems))
+            {
+                var items = await e.DataView.GetStorageItemsAsync();
+                if (items.Count > 0)
+                    await OpenNewFilesDirectlyAsync(items as IReadOnlyList<StorageFile>);
+            }
+
+        }
+
+        private void Page_DragOver(object sender, DragEventArgs e)
+        {
+            e.AcceptedOperation = DataPackageOperation.Copy;;
+        }
     }
 }
